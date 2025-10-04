@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "backup.js",
   "scripts": {
-    "backup": "node backup.js backup",
-    "backup-data": "node backup.js backup-data",
-    "restore": "node backup.js restore"
+    "backup": "NODE_ENV=production node /app/backup.js backup",
+    "backup-data": "NODE_ENV=production node /app/backup.js backup-data",
+    "restore": "NODE_ENV=production node /app/backup.js restore"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.901.0",

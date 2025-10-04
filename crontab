@@ -1,9 +1,5 @@
-NODE_ENV=production
-PATH=/usr/local/bin:/usr/bin:/bin
-
-
 # Run backup every day at 2 AM
-*/2 * * * * /usr/local/bin/node /app/backup.js backup >> /proc/1/fd/1 2>&1
+*/2 * * * * /app/run-backup.sh >> /proc/1/fd/1 2>&1
 
 # Healthcheck: log every minute so you know cron is alive
 * * * * * echo "cron alive $(date)" >> /proc/1/fd/1
