@@ -17,4 +17,5 @@ RUN npm install --production
 COPY . .
 
 # Default command (your app server)
-CMD ["npm", "start"]
+CMD ["node", "backup.js", "backup"]
+
