@@ -21,7 +21,7 @@ COPY . .
 
 # Add cron job
 # Example: run backup every day at 2 AM UTC
-RUN echo "0 2 * * * root node /app/backup.js backup >> /app/backup.log 2>&1" > /etc/cron.d/backup-cron \
+RUN echo "* * * * * root node /app/backup.js backup >> /app/backup.log 2>&1" > /etc/cron.d/backup-cron \
   && chmod 0644 /etc/cron.d/backup-cron \
   && crontab /etc/cron.d/backup-cron
 
