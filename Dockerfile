@@ -1,7 +1,6 @@
 FROM node:20-slim
 
 # Install pg_dump for Postgres 17
-# Install pg_dump for Postgres 17
 RUN apt-get update \
  && apt-get install -y wget gnupg curl lsb-release \
  && echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \

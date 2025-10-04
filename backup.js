@@ -68,7 +68,6 @@ async function backup({ dataOnly = false } = {}) {
   const suffix = dataOnly ? "data-only" : "full";
   const ext = dataOnly ? "sql.gz" : "dump"; // 👈 don't gzip custom dumps
   const outFile = path.join(BACKUP_DIR, `${DB_NAME}-${suffix}-${ts}.${ext}`);
-  console.log("xx", process.env);
 
   const dumpCmd = dataOnly
     ? `pg_dump -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USERNAME} \
@@ -172,8 +171,7 @@ async function uploadToBackblaze(filePath) {
     fs.unlinkSync(filePath);
     console.log(`🗑️  Local file deleted: ${filePath}`);
 
-    // 3️⃣ Remote cleanup: keep only last 7 files
-    const KEEP_LAST = 7;
+    const KEEP_LAST = 10;
 
     const listResp = await s3.send(
       new ListObjectsV2Command({
