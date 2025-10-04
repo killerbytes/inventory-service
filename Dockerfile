@@ -1,27 +1,20 @@
-FROM node:18
+# Use official Node image
+FROM node:20-slim
 
+# Install PostgreSQL client tools (pg_dump, pg_restore, psql)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+# Set work directory
 WORKDIR /app
 
-# Install deps
+# Copy package files and install deps
 COPY package*.json ./
-RUN npm install
+RUN npm install --production
 
-# Copy code
+# Copy app source
 COPY . .
 
-# Install cron + postgres client
-RUN apt-get update && apt-get install -y cron postgresql-client
-
-# Copy crontab
-COPY crontab /etc/cron.d/db-backup-cron
-RUN chmod 0644 /etc/cron.d/db-backup-cron
-
-# Copy wrapper script
-COPY run-backup.sh /app/run-backup.sh
-RUN chmod +x /app/run-backup.sh
-
-# Register cron jobs
-RUN crontab /etc/cron.d/db-backup-cron
-
-# Run cron in foreground
-CMD ["cron", "-f"]
+# Default command (your app server)
+CMD ["npm", "start"]
