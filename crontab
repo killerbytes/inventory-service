@@ -1,2 +1,3 @@
 # run backup every night at 2 AM
-*/1 * * * * node /app/backup.js backup >> /proc/1/fd/1 2>&1
+*/2 * * * * node /app/backup.js backup >> /proc/1/fd/1 2>&1
+

@@ -23,4 +23,4 @@ RUN npm install --production
 COPY crontab /app/crontab
 
 # Default command runs cron + your node app
-CMD supercronic /app/crontab
+CMD ["/usr/local/bin/supercronic", "/app/crontab"]
