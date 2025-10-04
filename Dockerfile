@@ -1,21 +1,29 @@
-# Use official Node image
+# Use Node.js 20 slim image
 FROM node:20-slim
 
-# Install PostgreSQL client tools (pg_dump, pg_restore, psql)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    postgresql-client \
- && rm -rf /var/lib/apt/lists/*
+# Install Postgres client 17 + cron + needed tools
+RUN apt-get update && apt-get install -y wget gnupg cron \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && apt-get update \
+  && apt-get install -y postgresql-client-17 \
+  && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
 # Copy package files and install deps
 COPY package*.json ./
 RUN npm install --production
 
-# Copy app source
+# Copy app code
 COPY . .
 
-# Default command (your app server)
-CMD ["node", "backup.js", "backup"]
+# Add cron job
+# Example: run backup every day at 2 AM UTC
+RUN echo "0 2 * * * root node /app/backup.js backup >> /app/backup.log 2>&1" > /etc/cron.d/backup-cron \
+  && chmod 0644 /etc/cron.d/backup-cron \
+  && crontab /etc/cron.d/backup-cron
 
+# Run cron in foreground (Railway needs the container alive)
+CMD ["cron", "-f"]
