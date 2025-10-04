@@ -1,8 +1,0 @@
-{
-  "cron": [
-    {
-      "schedule": "*/1 * * * *",
-      "command": "node backup.js backup"
-    }
-  ]
-}
