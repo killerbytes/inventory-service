@@ -9,7 +9,7 @@
  */
 
 const env = process.env.NODE_ENV || "development";
-if (env !== "production") {
+if (!process.env.DB_HOST) {
   require("dotenv").config({ path: `.env.${env}` });
 }
 const { exec } = require("child_process");
