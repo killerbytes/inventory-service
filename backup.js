@@ -33,6 +33,7 @@ const {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
 } = process.env;
+console.log(123, process.env);
 
 const BACKUP_DIR = process.env.BACKUP_DIR || "./backups";
 if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
