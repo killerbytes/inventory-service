@@ -20,24 +20,27 @@ const {
 } = require("@aws-sdk/client-s3");
 
 // 1️⃣ Load environment
+/**
+ * backup.js (Postgres version, Railway-safe)
+ */
+
 const env = process.env.NODE_ENV || "development";
-if (!process.env.DB_HOST) {
-  const dotenvPath = `.env.${env}`;
-  if (fs.existsSync(dotenvPath)) {
-    require("dotenv").config({ path: dotenvPath });
-    console.log(`🔑 Loaded env from ${dotenvPath}`);
-  } else {
-    console.error(`❌ Missing ${dotenvPath} (DB_HOST not set)`);
-    process.exit(1);
-  }
+
+// ✅ Only load dotenv locally
+if (env !== "production") {
+  require("dotenv").config({ path: `.env.${env}` });
 }
 
-const {
+const { URL } = require("url");
+
+// Extract vars (Railway gives DATABASE_URL, local gives DB_* vars)
+let {
   DB_HOST,
   DB_USERNAME,
   DB_PASSWORD,
   DB_NAME,
-  DB_PORT = 5432,
+  DB_PORT,
+  DATABASE_URL,
   B2_BUCKET,
   AWS_ENDPOINT,
   AWS_DEFAULT_REGION,
@@ -45,12 +48,32 @@ const {
   AWS_SECRET_ACCESS_KEY,
 } = process.env;
 
-if (!DB_HOST || !DB_USERNAME || !DB_NAME) {
-  console.error(
-    "❌ Missing database config (DB_HOST, DB_USERNAME, DB_NAME required)"
-  );
+// ✅ Parse DATABASE_URL into DB_* vars if needed
+if (DATABASE_URL) {
+  try {
+    const dbUrl = new URL(DATABASE_URL);
+    DB_HOST = DB_HOST || dbUrl.hostname;
+    DB_PORT = DB_PORT || dbUrl.port || "5432";
+    DB_USERNAME = DB_USERNAME || dbUrl.username;
+    DB_PASSWORD = DB_PASSWORD || dbUrl.password;
+    DB_NAME = DB_NAME || dbUrl.pathname.replace(/^\//, "");
+  } catch (e) {
+    console.error("❌ Invalid DATABASE_URL:", DATABASE_URL);
+    process.exit(1);
+  }
+}
+
+if (!DB_HOST || !DB_NAME) {
+  console.error("❌ Missing database config! Check Railway Variables.");
   process.exit(1);
 }
+
+console.log("✅ DB Config Loaded:", {
+  DB_HOST,
+  DB_PORT,
+  DB_USERNAME,
+  DB_NAME,
+});
 
 const BACKUP_DIR = process.env.BACKUP_DIR || "./backups";
 if (!fs.existsSync(BACKUP_DIR)) fs.mkdirSync(BACKUP_DIR, { recursive: true });
