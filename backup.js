@@ -47,6 +47,7 @@ let {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
 } = process.env;
+console.log(33, process.env);
 
 // ✅ Parse DATABASE_URL into DB_* vars if needed
 if (DATABASE_URL) {
