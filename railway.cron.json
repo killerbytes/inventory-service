@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {
+      "schedule": "*/2 * * * *",
+      "command": "node backup.js backup"
+    }
+  ]
+}
