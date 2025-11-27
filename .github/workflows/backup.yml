@@ -2,7 +2,7 @@ name: Daily Automated Backup to Backblaze B2
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 jobs:
