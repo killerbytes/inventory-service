@@ -2,8 +2,8 @@ name: Daily Automated Backup to Backblaze B2
 
 on:
   schedule:
-    - cron: "*/2 * * * *" # runs every day at 00:00 UTC
-  workflow_dispatch: # allows manual trigger in GitHub
+    - cron: "*/2 * * * *"
+  workflow_dispatch:
 
 jobs:
   backup:
@@ -16,10 +16,14 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Install Postgres Client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Install PostgreSQL 17 Client
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(. /etc/os-release && echo $VERSION_CODENAME)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-17
 
-      - name: Run Backup Script
+      - name: Run Backup
         run: node backup.js backup
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
