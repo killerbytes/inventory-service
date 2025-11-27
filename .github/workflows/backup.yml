@@ -2,7 +2,7 @@ name: Daily Automated Backup to Backblaze B2
 
 on:
   schedule:
-    - cron: "0 0 * * *" # runs every day at 00:00 UTC
+    - cron: "*/2 * * * *" # runs every day at 00:00 UTC
   workflow_dispatch: # allows manual trigger in GitHub
 
 jobs:
