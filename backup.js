@@ -200,6 +200,7 @@ console.log('s3', s3)
       }
     }
   } catch (err) {
+    console.error(s3)
     console.error("❌ Backblaze upload/cleanup failed:", err.message);
   }
 }
