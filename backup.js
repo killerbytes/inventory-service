@@ -153,9 +153,9 @@ async function uploadToBackblaze(filePath) {
       secretAccessKey: AWS_SECRET_ACCESS_KEY,
     },
   });
-console.log('s3', s3)
   const key = path.basename(filePath);
   const fileStream = fs.createReadStream(filePath);
+  console.log(filePath, key, fileStream)
 
   try {
     console.log(1)
