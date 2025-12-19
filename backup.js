@@ -141,6 +141,7 @@ async function restoreAndDev(filePath) {
 }
 
 async function uploadToBackblaze(filePath) {
+  console.log(11, filePath)
   if (!B2_BUCKET) return;
 
   const s3 = new S3Client({
