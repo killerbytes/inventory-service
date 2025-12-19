@@ -2,7 +2,7 @@ name: Beer Titos Backup to Backblaze B2
 
 on:
   schedule:
-    - cron: "0 20 * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
