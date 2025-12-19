@@ -200,7 +200,6 @@ async function uploadToBackblaze(filePath) {
       }
     }
   } catch (err) {
-    console.error(s3)
     console.error("❌ Backblaze upload/cleanup failed:", err.message);
   }
 }
